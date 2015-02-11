@@ -9,6 +9,7 @@
 #include "SDL_timer.h"
 #include "TextureManager.h"
 #include "Ship.h";
+#include "Unit.h";
 #include "KeyManager.h"
 
 //Screen dimension constants 
@@ -23,7 +24,7 @@ SDL_Rect stretchRect;
 
 
 Ship *ship = new Ship(200,200,150,330,0);//x,y,w,h,r
-
+Unit *unit = new Unit(0,0,20,20,ship);
 //Starts up SDL and creates window 
 bool init(); 
 //Loads media 
@@ -174,6 +175,7 @@ int main( int argc, char* args[] )
 					KeyManager::getKeyManager()->Update(eHandler);
 					std::clock_t num = std::clock()-mClock;
 					ship->Update(num);
+					unit->Update(num);
 					draw();
 					mClock = std::clock();
 					if(KeyManager::getKeyManager()->keyPressed(SDL_SCANCODE_ESCAPE))
@@ -192,6 +194,7 @@ int main( int argc, char* args[] )
 void draw(){
 	SDL_RenderClear(renderer);
 	ship->Draw(renderer,SDL_RendererFlip::SDL_FLIP_NONE);
+	unit->Draw(renderer,SDL_RendererFlip::SDL_FLIP_NONE);
 	SDL_RenderPresent(renderer);
 }
 
@@ -200,5 +203,6 @@ bool loadMedia()
 	//Loading success flag 
 	bool success = true; 
 	TextureManager::getManager()->shipTexture = loadTexture("images/ship.png");
+	TextureManager::getManager()->skeletonTexture = loadTexture("images/person.png");
 	return success; 
 }
