@@ -25,3 +25,9 @@
 *.exe
 *.out
 *.app
+*.ilk
+*.pdb
+*.tlog
+*.lastbuildstate
+*.log
+*.idb
