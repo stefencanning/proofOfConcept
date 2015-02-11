@@ -27,6 +27,8 @@ bool loadMedia();
 //Frees media and shuts down SDL 
 void close();
 SDL_Texture* loadTexture( std::string path );
+SDL_Texture* testTexture = NULL; 
+float scale = 1; 
 
 
 using namespace std;
@@ -162,6 +164,24 @@ int main( int argc, char* args[] )
 			while(run)
 			{
 				KeyManager::getKeyManager()->Update(eHandler);
+				if(KeyManager::getKeyManager()->keyPressed(SDL_SCANCODE_A ))
+				{
+					scale+=0.1;
+				}
+				if(KeyManager::getKeyManager()->keyPressed(SDL_SCANCODE_S ) && scale>0.1 )
+				{
+					scale-=0.1; 
+				}
+				 //Clear screen
+                SDL_RenderClear( renderer );
+
+                //Render texture to screen
+                SDL_RenderCopy( renderer, testTexture, NULL, NULL );
+				
+				SDL_RenderSetScale(renderer, scale,scale);
+
+                //Update screen
+                SDL_RenderPresent( renderer );
 			}
 		}
 
@@ -176,6 +196,14 @@ bool loadMedia()
 { 
 	//Loading success flag 
 	bool success = true; 
+	
+	 //Load PNG texture
+    testTexture = loadTexture( "pirateMap.png" );
+    if( testTexture == NULL )
+    {
+        printf( "Failed to load texture image!\n" );
+        success = false;
+    }
 
 	return success; 
 }
