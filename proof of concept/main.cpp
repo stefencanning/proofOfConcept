@@ -7,6 +7,8 @@
 #include <ctime>
 #include "SDL_ttf.h"
 #include "SDL_timer.h"
+#include "TextureManager.h"
+#include "Ship.h";
 
 //Screen dimension constants 
 //The window we'll be rendering to 
@@ -19,10 +21,13 @@ SDL_Renderer* renderer = NULL;
 SDL_Rect stretchRect; 
 
 
+Ship *ship = new Ship(200,200,150,330,0);//x,y,w,h,r
+
 //Starts up SDL and creates window 
 bool init(); 
 //Loads media 
 bool loadMedia(); 
+void draw();
 //Frees media and shuts down SDL 
 void close();
 SDL_Texture* loadTexture( std::string path );
@@ -161,20 +166,25 @@ int main( int argc, char* args[] )
 			bool run = true;
 			while(run)
 			{
+				draw();
 			}
 		}
-
-
 	}
 	close();
 	return 0;
 }
 
 
+void draw(){
+	SDL_RenderClear(renderer);
+	ship->Draw(renderer,SDL_RendererFlip::SDL_FLIP_NONE);
+	SDL_RenderPresent(renderer);
+}
+
 bool loadMedia() 
 { 
 	//Loading success flag 
 	bool success = true; 
-
+	TextureManager::getManager()->shipTexture = loadTexture("images/ship.png");
 	return success; 
 }
