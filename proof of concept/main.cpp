@@ -10,7 +10,7 @@
 #include "TextureManager.h"
 #include "Ship.h";
 #include "KeyManager.h"
-
+#include "Island.h"
 //Screen dimension constants 
 //The window we'll be rendering to 
 SDL_Window* window = NULL; 
@@ -23,7 +23,7 @@ SDL_Rect stretchRect;
 
 
 Ship *ship = new Ship(200,200,150,330,0);//x,y,w,h,r
-
+Island *island = new Island(600,600,150,300,0);
 //Starts up SDL and creates window 
 bool init(); 
 //Loads media 
@@ -32,7 +32,7 @@ void draw();
 //Frees media and shuts down SDL 
 void close();
 SDL_Texture* loadTexture( std::string path );
-
+float scale = 3000; 
 
 using namespace std;
 
@@ -174,6 +174,15 @@ int main( int argc, char* args[] )
 					KeyManager::getKeyManager()->Update(eHandler);
 					std::clock_t num = std::clock()-mClock;
 					ship->Update(num);
+					island->Update(num);
+					if(KeyManager::getKeyManager()->keyPressed(SDL_SCANCODE_UP ) && scale < 5000)
+				{
+					scale+=1;
+				}
+				if(KeyManager::getKeyManager()->keyPressed(SDL_SCANCODE_DOWN)  && scale > 2000)
+				{
+					scale-=1; 
+				}
 					draw();
 					mClock = std::clock();
 					if(KeyManager::getKeyManager()->keyPressed(SDL_SCANCODE_ESCAPE))
@@ -192,7 +201,9 @@ int main( int argc, char* args[] )
 void draw(){
 	SDL_RenderClear(renderer);
 	ship->Draw(renderer,SDL_RendererFlip::SDL_FLIP_NONE);
+	island->Draw(renderer,SDL_RendererFlip::SDL_FLIP_NONE);
 	SDL_RenderPresent(renderer);
+	SDL_RenderSetScale(renderer, scale /6000,scale/ 3000);
 }
 
 bool loadMedia() 
@@ -200,5 +211,6 @@ bool loadMedia()
 	//Loading success flag 
 	bool success = true; 
 	TextureManager::getManager()->shipTexture = loadTexture("images/ship.png");
+	TextureManager::getManager()->islandTexture = loadTexture("images/island.png");
 	return success; 
 }

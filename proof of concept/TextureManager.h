@@ -16,6 +16,7 @@ public:
 	SDL_Texture* glacier;
 	SDL_Texture* enemy;
 	SDL_Texture* shipTexture;
+	SDL_Texture* islandTexture;
 	SDL_Texture* bg1;
 	SDL_Texture* bg2;
 	SDL_Texture* bg3;

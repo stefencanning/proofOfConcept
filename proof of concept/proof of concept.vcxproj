@@ -69,11 +69,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Island.cpp" />
     <ClCompile Include="KeyManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Ship.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="Vector2f.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Island.h" />
     <ClInclude Include="KeyManager.h" />
+    <ClInclude Include="Ship.h" />
+    <ClInclude Include="TextureManager.h" />
+    <ClInclude Include="Vector2f.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
