@@ -41,3 +41,5 @@ proof of concept.sdf
 *.sdf
 *.suo
 *.sdf
+*.vcxproj
+*.filters
