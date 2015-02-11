@@ -14,6 +14,9 @@ KeyManager* KeyManager::getKeyManager()
 
 KeyManager::KeyManager(void)
 {
+	currentKeyStates = SDL_GetKeyboardState( keyLength );
+	size_t size=size_t(keyLength);
+	SDL_memcpy(lastKeyStates,currentKeyStates,size);
 	QUIT=false;
 }
 
@@ -23,8 +26,9 @@ KeyManager::~KeyManager(void)
 
 void KeyManager::Update(SDL_Event eHandler)
 {
-	lastKeyStates=currentKeyStates;
-	currentKeyStates = SDL_GetKeyboardState( NULL );
+	size_t size=size_t(keyLength);
+	SDL_memcpy(lastKeyStates,currentKeyStates,size);
+	currentKeyStates = SDL_GetKeyboardState( keyLength );
 	SDL_GetMouseState( &MouseX, &MouseY );
 	while(SDL_PollEvent(&eHandler) != 0)
 	{
@@ -55,7 +59,15 @@ void KeyManager::Update(SDL_Event eHandler)
 
 bool KeyManager::keyPressed(SDL_Scancode code)
 {
-	if(!lastKeyStates[code]&&currentKeyStates[code])
+	bool pressed=false;
+	if(lastKeyStates!=NULL)
+	{
+		if(lastKeyStates[code])
+		{
+			pressed=true;
+		}
+	}
+	if(!pressed&&currentKeyStates[code])
 	{
 		return true;
 	}
@@ -73,7 +85,15 @@ bool KeyManager::keyDown(SDL_Scancode code)
 
 bool KeyManager::keyReleased(SDL_Scancode code)
 {
-	if(lastKeyStates[code]&&!currentKeyStates[code])
+	bool pressed=false;
+	if(lastKeyStates!=NULL)
+	{
+		if(lastKeyStates[code])
+		{
+			pressed=true;
+		}
+	}
+	if(pressed&&!currentKeyStates[code])
 	{
 		return true;
 	}

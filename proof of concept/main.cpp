@@ -168,6 +168,7 @@ int main( int argc, char* args[] )
 			bool run = true;
 			while(run)
 			{
+
 				if(((std::clock()-mClock)/(double)CLOCKS_PER_SEC) >= 1.0/480.0)
 				{
 					KeyManager::getKeyManager()->Update(eHandler);
@@ -175,6 +176,10 @@ int main( int argc, char* args[] )
 					ship->Update(num);
 					draw();
 					mClock = std::clock();
+					if(KeyManager::getKeyManager()->keyPressed(SDL_SCANCODE_ESCAPE))
+					{
+						run=false;
+					}
 				}
 			}
 		}

@@ -7,9 +7,10 @@ class KeyManager
 private:
 	static KeyManager* me;
 	KeyManager(void);
-	const Uint8* lastKeyStates;
+	Uint8* lastKeyStates;
 	const Uint8* currentKeyStates;
 	bool QUIT;
+	int* keyLength;
 	int MouseX,MouseY;
 	bool LeftClick,RightClick;
 public:
