@@ -34,7 +34,6 @@ void Ship::Update(float timeElapsed){
         }
 		accel.x =0;
 		accel.y = 0;
-		
 		if (KeyManager::getKeyManager()->keyDown(SDL_SCANCODE_W))
 		{
 			Vector2f dir;

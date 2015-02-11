@@ -17,6 +17,8 @@ KeyManager::KeyManager(void)
 	currentKeyStates = SDL_GetKeyboardState( keyLength );
 	size_t size=size_t(keyLength);
 	SDL_memcpy(lastKeyStates,currentKeyStates,size);
+	currentScroll=0;
+	lastScroll=0;
 	QUIT=false;
 }
 
@@ -30,6 +32,7 @@ void KeyManager::Update(SDL_Event eHandler)
 	SDL_memcpy(lastKeyStates,currentKeyStates,size);
 	currentKeyStates = SDL_GetKeyboardState( keyLength );
 	SDL_GetMouseState( &MouseX, &MouseY );
+	lastScroll = currentScroll;
 	while(SDL_PollEvent(&eHandler) != 0)
 	{
 		if(eHandler.type == SDL_MOUSEBUTTONDOWN)
@@ -56,7 +59,7 @@ void KeyManager::Update(SDL_Event eHandler)
 		}
 		if(eHandler.type == SDL_MOUSEWHEEL)
 		{
-
+			currentScroll+=eHandler.button.x;
 		}
 	}
 }
