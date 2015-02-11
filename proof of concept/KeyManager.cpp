@@ -54,6 +54,10 @@ void KeyManager::Update(SDL_Event eHandler)
 				RightClick = false;
 			}
 		}
+		if(eHandler.type == SDL_MOUSEWHEEL)
+		{
+
+		}
 	}
 }
 
@@ -107,4 +111,19 @@ bool KeyManager::keyUp(SDL_Scancode code)
 		return true;
 	}
 	return false;
+}
+
+float KeyManager::scrollChange()
+{
+	return currentScroll-lastScroll;
+}
+
+float KeyManager::scrollValue()
+{
+	return currentScroll;
+}
+
+Vector2f KeyManager::mousePosition()
+{
+	return Vector2f(MouseX,MouseY);
 }
