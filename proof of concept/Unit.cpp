@@ -72,8 +72,15 @@ void Unit::Draw(SDL_Renderer* gRenderer, SDL_RendererFlip flipType){
 	posRec.h = height;
 	SDL_RenderCopyEx(gRenderer,TextureManager::getManager()->skeletonTexture,NULL,new SDL_Rect(posRec),NULL,NULL,SDL_FLIP_NONE);
 }
+void Unit::setStationed(Ship* myShip)
+{
+	stationedAt = myShip;
+}
 
-
+Ship* Unit::getStationed()
+{
+	return stationedAt;
+}
 Unit::~Unit(void)
 {
 }

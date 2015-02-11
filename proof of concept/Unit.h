@@ -2,8 +2,9 @@
 #include "Vector2f.h"
 #include <math.h>
 #include "TextureManager.h"
-#include "KeyManager.h";
-#include "Ship.h";
+#include "KeyManager.h"
+#include "Ship.h"
+#include "Island.h"
 
 #pragma once
 
@@ -13,6 +14,8 @@ public:
 	Unit(float,float,float,float,Ship*);//x,y,w,h,r
 	void Update(float timeElapsed);
 	void Draw(SDL_Renderer*, SDL_RendererFlip);
+	void setStationed(Ship*);
+	Ship* getStationed();
 	~Unit(void);
 private:
 	Vector2f velocity;

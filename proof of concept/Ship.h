@@ -3,10 +3,11 @@
 #include "Vector2f.h"
 #include <math.h>
 #include "TextureManager.h"
-#include "KeyManager.h";
+#include "KeyManager.h"
+#include "Body.h"
 #pragma once
 
-class Ship
+class Ship 
 {
 public:
 	Ship(float,float,float,float,float);//x,y,w,h,r
