@@ -9,6 +9,7 @@
 #include "SDL_timer.h"
 #include "TextureManager.h"
 #include "Ship.h";
+#include "KeyManager.h"
 
 //Screen dimension constants 
 //The window we'll be rendering to 
@@ -32,7 +33,6 @@ void draw();
 void close();
 SDL_Texture* loadTexture( std::string path );
 
-SDL_Event e;
 
 using namespace std;
 
@@ -166,6 +166,7 @@ int main( int argc, char* args[] )
 			bool run = true;
 			while(run)
 			{
+				KeyManager::getKeyManager()->Update(eHandler);
 				draw();
 			}
 		}
