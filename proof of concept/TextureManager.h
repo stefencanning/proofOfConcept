@@ -14,7 +14,7 @@ public:
 	SDL_Texture*  mMenuTexture;
 	SDL_Texture* particle;
 	SDL_Texture* glacier;
-	SDL_Texture* enemy;
+	SDL_Texture* skeletonTexture;
 	SDL_Texture* shipTexture;
 	SDL_Texture* islandTexture;
 	SDL_Texture* bg1;

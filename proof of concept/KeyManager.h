@@ -1,6 +1,7 @@
 #pragma once
 #include <stddef.h>
 #include "SDL.h"
+#include "Vector2f.h"
 using namespace std;
 class KeyManager
 {
@@ -13,11 +14,16 @@ private:
 	int* keyLength;
 	int MouseX,MouseY;
 	bool LeftClick,RightClick;
+	float currentScroll;
+	float lastScroll;
 public:
 	bool keyDown(SDL_Scancode code);
 	bool keyPressed(SDL_Scancode code);
 	bool keyReleased(SDL_Scancode code);
 	bool keyUp(SDL_Scancode code);
+	float scrollChange();
+	float scrollValue();
+	Vector2f mousePosition();
 	static KeyManager* getKeyManager();
 	void Update(SDL_Event eHandler);
 	~KeyManager(void);
