@@ -3,16 +3,16 @@
 #include "Vector2f.h"
 #include <math.h>
 #include "TextureManager.h"
+#include "KeyManager.h";
 #pragma once
 
 class Ship
 {
 public:
 	Ship(float,float,float,float,float);//x,y,w,h,r
-	void Update(float timeElapsed,float,float);
+	void Update(float timeElapsed);
 	void Draw(SDL_Renderer*, SDL_RendererFlip);
 	bool IsAlive();
-	void UpdatePThread(int );
 	static int threadFunction( void* data );
 	void Kill();
 	void Reset( SDL_Renderer*);

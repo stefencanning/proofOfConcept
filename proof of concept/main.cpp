@@ -156,6 +156,8 @@ int main( int argc, char* args[] )
 	} 
 	else 
 	{ 
+		std::clock_t mClock;
+		mClock = std::clock();
 		//Load media 
 		if( !loadMedia() )	
 		{
@@ -166,8 +168,14 @@ int main( int argc, char* args[] )
 			bool run = true;
 			while(run)
 			{
-				KeyManager::getKeyManager()->Update(eHandler);
-				draw();
+				if(((std::clock()-mClock)/(double)CLOCKS_PER_SEC) >= 1.0/480.0)
+				{
+					KeyManager::getKeyManager()->Update(eHandler);
+					std::clock_t num = std::clock()-mClock;
+					ship->Update(num);
+					draw();
+					mClock = std::clock();
+				}
 			}
 		}
 	}

@@ -3,11 +3,11 @@
 Ship::Ship(float x,float y,float w,float h,float r) {
 	position.x = x;
 	position.y = y;
-	width = w;
-	height = h;
+	width = h;
+	height = w;
 	rotation = r;
 	//CreateShape(5,r,0);
-	//speed=40.0f;
+	speed=40.0f;
 	//texture.loadFromFile( "player.png", gRenderer );
 	//m_animation = new Animation(6,185.5,187,"Mr.O_MO_.png",gRenderer);
 }
@@ -23,32 +23,35 @@ void Ship::Draw(SDL_Renderer* gRenderer, SDL_RendererFlip flipType) {
 	SDL_RenderCopyEx(gRenderer,TextureManager::getManager()->shipTexture,NULL,new SDL_Rect(posRec),rotation,NULL,SDL_FLIP_NONE);
 }
 
-void Ship::Update(float timeElapsed,float SCREENW,float SCREENH){
-        /*if (KeyPresses::Right) {
-			changeRotation(20*timeElapsed);
+
+void Ship::Update(float timeElapsed){
+	timeElapsed/=1000;
+	if (KeyManager::getKeyManager()->keyDown(SDL_SCANCODE_A)) {
+			rotation-=20*timeElapsed;
         }
-		else if (KeyPresses::Left) {
-               changeRotation(-20*timeElapsed);
-        }*/
+		else if (KeyManager::getKeyManager()->keyDown(SDL_SCANCODE_D)) {
+			rotation+=20*timeElapsed;
+        }
 		accel.x =0;
 		accel.y = 0;
-		/*
-		if (KeyPresses::Up)
+		
+		if (KeyManager::getKeyManager()->keyDown(SDL_SCANCODE_W))
 		{
 			Vector2f dir;
-			dir.x = cos(rotation*PI/180);
-			dir.y = sin(rotation*PI/180);
+			dir.x = cos(rotation*M_PI/180);
+			dir.y = sin(rotation*M_PI/180);
 			accel.x = dir.x*timeElapsed*speed;
 			accel.y = dir.y*timeElapsed*speed;
         }
-		else if (KeyPresses::Down)
+		else if (KeyManager::getKeyManager()->keyDown(SDL_SCANCODE_S))
 		{
 			Vector2f dir;
-			dir.x = cos(rotation*PI/180);
-			dir.y = sin(rotation*PI/180);
+			dir.x = cos(rotation*M_PI/180);
+			dir.y = sin(rotation*M_PI/180);
 			accel.x = -dir.x*timeElapsed*speed;
 			accel.y = -dir.y*timeElapsed*speed;
-        }*/
+        }
+		/*
 		if(position.x>SCREENW+10){
 			position.x = -20;
 		}
@@ -60,13 +63,16 @@ void Ship::Update(float timeElapsed,float SCREENW,float SCREENH){
 		}
 		else if(position.y<-30){
 			position.y = SCREENH;
-		}
+		}*/
 
 		velocity.x+=accel.x;
 		velocity.y+=accel.y;
 
 		velocity.x*=1.0f-(0.2f*timeElapsed);
 		velocity.y*=1.0f-(0.2f*timeElapsed);
+		
+	position.x+=velocity.x*timeElapsed;
+	position.y+=velocity.y*timeElapsed;
 
 }
 	bool Ship::IsAlive(){
