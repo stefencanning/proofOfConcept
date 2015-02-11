@@ -3,7 +3,6 @@
 KeyManager* KeyManager::me;
 
 
-
 KeyManager* KeyManager::getKeyManager()
 {
 	if(me==NULL)
@@ -13,12 +12,10 @@ KeyManager* KeyManager::getKeyManager()
 	return me;
 }
 
-
 KeyManager::KeyManager(void)
 {
 	QUIT=false;
 }
-
 
 KeyManager::~KeyManager(void)
 {
@@ -55,7 +52,6 @@ void KeyManager::Update(SDL_Event eHandler)
 		}
 	}
 }
-
 
 bool KeyManager::keyPressed(SDL_Scancode code)
 {
