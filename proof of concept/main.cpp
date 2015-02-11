@@ -11,6 +11,7 @@
 #include "Ship.h";
 #include "Unit.h";
 #include "KeyManager.h"
+#include <vector>
 
 //Screen dimension constants 
 //The window we'll be rendering to 
@@ -23,8 +24,9 @@ SDL_Renderer* renderer = NULL;
 SDL_Rect stretchRect; 
 
 
-Ship *ship = new Ship(200,200,150,330,0);//x,y,w,h,r
-Unit *unit = new Unit(0,0,20,20,ship);
+Ship *ship = new Ship(200,200,330,150,0);//x,y,w,h,r
+vector<Unit*> units = vector<Unit*>();
+Unit* controlling;
 //Starts up SDL and creates window 
 bool init(); 
 //Loads media 
@@ -167,6 +169,10 @@ int main( int argc, char* args[] )
 		else
 		{
 			bool run = true;
+			units.push_back(new Unit(0,0,20,20,ship));
+			units.push_back(new Unit(10,0,20,20,ship));
+			units.push_back(new Unit(0,10,20,20,ship));
+			controlling=units.at(0);
 			while(run)
 			{
 
@@ -175,7 +181,24 @@ int main( int argc, char* args[] )
 					KeyManager::getKeyManager()->Update(eHandler);
 					std::clock_t num = std::clock()-mClock;
 					ship->Update(num);
-					unit->Update(num);
+					if(KeyManager::getKeyManager()->LeftClick)
+					{
+						for(int i =0; i < units.size(); i++)
+						{
+							float xPos = KeyManager::getKeyManager()->mousePosition().x;
+							float yPos = KeyManager::getKeyManager()->mousePosition().y;
+							if( ((xPos-units.at(i)->globalPosition.x)*(xPos-units.at(i)->globalPosition.x)) + 
+								((yPos-units.at(i)->globalPosition.y)*(yPos-units.at(i)->globalPosition.y)) < 
+								((units.at(i)->width)*(units.at(i)->width)) )
+							{
+								controlling = units.at(i);
+							}
+						}
+					}
+					if(controlling!=NULL)
+					{
+						controlling->Update(num);
+					}
 					draw();
 					mClock = std::clock();
 					if(KeyManager::getKeyManager()->keyPressed(SDL_SCANCODE_ESCAPE))
@@ -194,7 +217,10 @@ int main( int argc, char* args[] )
 void draw(){
 	SDL_RenderClear(renderer);
 	ship->Draw(renderer,SDL_RendererFlip::SDL_FLIP_NONE);
-	unit->Draw(renderer,SDL_RendererFlip::SDL_FLIP_NONE);
+	for(int i = 0; i < units.size(); i ++)
+	{
+		units.at(i)->Draw(renderer,SDL_RendererFlip::SDL_FLIP_NONE);
+	}
 	SDL_RenderPresent(renderer);
 }
 
@@ -204,5 +230,6 @@ bool loadMedia()
 	bool success = true; 
 	TextureManager::getManager()->shipTexture = loadTexture("images/ship.png");
 	TextureManager::getManager()->skeletonTexture = loadTexture("images/person.png");
+	TextureManager::getManager()->circleTexture = loadTexture("images/circle.png");
 	return success; 
 }

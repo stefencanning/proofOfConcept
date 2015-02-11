@@ -1,5 +1,7 @@
 #pragma once
 #include <stddef.h>
+#include <stdio.h>
+#include <string.h>
 #include "SDL.h"
 #include "Vector2f.h"
 using namespace std;
@@ -11,9 +13,8 @@ private:
 	Uint8* lastKeyStates;
 	const Uint8* currentKeyStates;
 	bool QUIT;
-	int* keyLength;
+	int keyLength;
 	int MouseX,MouseY;
-	bool LeftClick,RightClick;
 	float currentScroll;
 	float lastScroll;
 public:
@@ -21,6 +22,7 @@ public:
 	bool keyPressed(SDL_Scancode code);
 	bool keyReleased(SDL_Scancode code);
 	bool keyUp(SDL_Scancode code);
+	bool LeftClick,RightClick;
 	float scrollChange();
 	float scrollValue();
 	Vector2f mousePosition();

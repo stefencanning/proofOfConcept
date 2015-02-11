@@ -14,9 +14,11 @@ KeyManager* KeyManager::getKeyManager()
 
 KeyManager::KeyManager(void)
 {
-	currentKeyStates = SDL_GetKeyboardState( keyLength );
-	size_t size=size_t(keyLength);
-	SDL_memcpy(lastKeyStates,currentKeyStates,size);
+	currentKeyStates = SDL_GetKeyboardState(&keyLength);
+	lastKeyStates = new Uint8[keyLength];
+	memcpy(lastKeyStates, currentKeyStates, keyLength);
+	LeftClick=false;
+	RightClick=false;
 	currentScroll=0;
 	lastScroll=0;
 	QUIT=false;
@@ -28,9 +30,10 @@ KeyManager::~KeyManager(void)
 
 void KeyManager::Update(SDL_Event eHandler)
 {
-	size_t size=size_t(keyLength);
-	SDL_memcpy(lastKeyStates,currentKeyStates,size);
-	currentKeyStates = SDL_GetKeyboardState( keyLength );
+	lastKeyStates = new Uint8[keyLength];
+	memcpy(lastKeyStates, currentKeyStates, keyLength);
+	currentKeyStates = SDL_GetKeyboardState(&keyLength);
+
 	SDL_GetMouseState( &MouseX, &MouseY );
 	lastScroll = currentScroll;
 	while(SDL_PollEvent(&eHandler) != 0)
@@ -95,7 +98,7 @@ bool KeyManager::keyReleased(SDL_Scancode code)
 	bool pressed=false;
 	if(lastKeyStates!=NULL)
 	{
-		if(lastKeyStates[code])
+		if(lastKeyStates[code]==1)
 		{
 			pressed=true;
 		}

@@ -1,11 +1,12 @@
+#pragma once
 #include <iostream>
 #include "SDL.h"
 #include "Vector2f.h"
+#include "Vector3f.h"
 #include <math.h>
 #include "TextureManager.h"
-#include "KeyManager.h";
-#pragma once
-
+#include "KeyManager.h"
+class Unit;
 class Ship
 {
 public:
@@ -19,6 +20,9 @@ public:
 	void IncreaseScore();
 	Vector2f position;
 	float rotation;
+	Vector3f driverPos;
+	Unit* driver;
+	void movement(float timeElapsed);
 	
 private:
 	Vector2f accel;
@@ -36,3 +40,5 @@ private:
 	//LTexture texture;
 	bool alive;
 };
+
+#include "Unit.h"
