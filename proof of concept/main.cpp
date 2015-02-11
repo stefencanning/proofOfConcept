@@ -19,7 +19,6 @@ SDL_Renderer* renderer = NULL;
 //Current displayed texture 
 SDL_Rect stretchRect; 
 
-
 //Starts up SDL and creates window 
 bool init(); 
 //Loads media 
@@ -28,17 +27,25 @@ bool loadMedia();
 void close();
 SDL_Texture* loadTexture( std::string path );
 SDL_Texture* testTexture = NULL; 
-float scale = 1; 
-
+float scale = 3000; 
+//Camera 
+//The dimensions of the level
+const int LEVEL_WIDTH = 6000;
+const int LEVEL_HEIGHT = 3000;
+SDL_Rect renderQuad = { 0, 0, LEVEL_WIDTH, LEVEL_HEIGHT };
 
 using namespace std;
+
+//Screen dimension constants
+const int SCREEN_WIDTH = 1280;
+const int SCREEN_HEIGHT = 720;
 
 bool init() 
 { 
 	//Initialization flag 
 	bool success = true; 
-	int screenWidth=1280;
-	int screenHeight=720;
+	int screenWidth= SCREEN_WIDTH;
+	int screenHeight= SCREEN_HEIGHT;
 	stretchRect.x = 0; 
 	stretchRect.y = 0; 
 	stretchRect.w = screenWidth; 
@@ -164,21 +171,21 @@ int main( int argc, char* args[] )
 			while(run)
 			{
 				KeyManager::getKeyManager()->Update(eHandler);
-				if(KeyManager::getKeyManager()->keyPressed(SDL_SCANCODE_A ))
+				if(KeyManager::getKeyManager()->keyPressed(SDL_SCANCODE_A ) && scale < 5000)
 				{
 					scale+=0.1;
 				}
-				if(KeyManager::getKeyManager()->keyPressed(SDL_SCANCODE_S ) && scale>0.1 )
+				if(KeyManager::getKeyManager()->keyPressed(SDL_SCANCODE_S)  && scale > 2000)
 				{
 					scale-=0.1; 
 				}
 				 //Clear screen
                 SDL_RenderClear( renderer );
 
-                //Render texture to screen
-                SDL_RenderCopy( renderer, testTexture, NULL, NULL );
+             	
+				SDL_RenderCopy( renderer, testTexture, NULL, &renderQuad );
 				
-				SDL_RenderSetScale(renderer, scale,scale);
+				SDL_RenderSetScale(renderer, scale /6000,scale/ 3000);
 
                 //Update screen
                 SDL_RenderPresent( renderer );
