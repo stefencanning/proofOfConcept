@@ -31,3 +31,8 @@
 *.lastbuildstate
 *.log
 *.idb
+*.sdf
+*.opensdf
+*.sdf
+proof of concept.sdf
+*.suo
