@@ -168,6 +168,10 @@ int main( int argc, char* args[] )
 			{
 				KeyManager::getKeyManager()->Update(eHandler);
 				draw();
+				if(KeyManager::getKeyManager()->keyPressed(SDL_SCANCODE_ESCAPE))
+				{
+					run=false;
+				}
 			}
 		}
 	}
