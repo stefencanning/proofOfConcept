@@ -18,7 +18,12 @@ SDL_Event eHandler;
 SDL_Renderer* renderer = NULL; 
 //Current displayed texture 
 SDL_Rect stretchRect; 
-
+//The dimensions of the level
+const int LEVEL_WIDTH = 6000;
+const int LEVEL_HEIGHT = 3000;
+//Screen dimension constants
+const int SCREEN_WIDTH = 1280;
+const int SCREEN_HEIGHT = 720;
 //Starts up SDL and creates window 
 bool init(); 
 //Loads media 
@@ -27,18 +32,19 @@ bool loadMedia();
 void close();
 SDL_Texture* loadTexture( std::string path );
 SDL_Texture* testTexture = NULL; 
+//Ship
+SDL_Texture* ship = NULL;
+SDL_Rect shipRec = { SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 200, 100 };
 float scale = 3000; 
 //Camera 
-//The dimensions of the level
-const int LEVEL_WIDTH = 6000;
-const int LEVEL_HEIGHT = 3000;
-SDL_Rect renderQuad = { 0, 0, LEVEL_WIDTH, LEVEL_HEIGHT };
+float screenOffSetX = shipRec.x;
+float screenOffSetY = shipRec.y;
+SDL_Rect renderQuad = {0, 0, LEVEL_WIDTH, LEVEL_HEIGHT };
 
 using namespace std;
 
-//Screen dimension constants
-const int SCREEN_WIDTH = 1280;
-const int SCREEN_HEIGHT = 720;
+
+float camX = SCREEN_WIDTH/2, camY = SCREEN_HEIGHT/2;
 
 bool init() 
 { 
@@ -50,7 +56,6 @@ bool init()
 	stretchRect.y = 0; 
 	stretchRect.w = screenWidth; 
 	stretchRect.h = screenHeight;
-
 
 	//Initialize SDL 
 	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0 ) 
@@ -104,8 +109,6 @@ bool init()
 	return success; 
 }
 
-
-
 SDL_Texture* loadTexture( std::string path ) 
 { 
 	//The final texture 
@@ -131,10 +134,6 @@ SDL_Texture* loadTexture( std::string path )
 	return newTexture; 
 }
 
-
-
-
-
 void close() 
 { 
 	//Free loaded image 
@@ -148,8 +147,6 @@ void close()
 	SDL_Quit();
 
 }
-
-
 
 int main( int argc, char* args[] ) 
 { 
@@ -168,36 +165,86 @@ int main( int argc, char* args[] )
 		else
 		{
 			bool run = true;
+			//The camera area
+            SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+
 			while(run)
 			{
-				KeyManager::getKeyManager()->Update(eHandler);
-				if(KeyManager::getKeyManager()->keyPressed(SDL_SCANCODE_A ) && scale < 5000)
-				{
-					scale+=0.1;
-				}
-				if(KeyManager::getKeyManager()->keyPressed(SDL_SCANCODE_S)  && scale > 2000)
-				{
-					scale-=0.1; 
-				}
-				 //Clear screen
-                SDL_RenderClear( renderer );
 
-             	
-				SDL_RenderCopy( renderer, testTexture, NULL, &renderQuad );
-				
-				SDL_RenderSetScale(renderer, scale /6000,scale/ 3000);
+			//Center the camera over the dot
+			camera.x = camX;
+			camera.y = camY;
 
-                //Update screen
-                SDL_RenderPresent( renderer );
+            //Keep the camera in bounds
+            if( camera.x < 0 )
+            { 
+                camera.x = 0;
+            }
+            if( camera.y < 0 )
+            {
+                camera.y = 0;
+            }
+            if( camera.x > LEVEL_WIDTH - camera.w )
+            {
+                camera.x = LEVEL_WIDTH - camera.w;
+            }
+            if( camera.y > LEVEL_HEIGHT - camera.h )
+            {
+                camera.y = LEVEL_HEIGHT - camera.h;
+            }
+
+			KeyManager::getKeyManager()->Update(eHandler);
+
+			if(KeyManager::getKeyManager()->keyPressed(SDL_SCANCODE_A) && scale < 5000)
+			{
+				//renderQuad.x = -SCREEN_WIDTH/2;
+				scale += 0.1;
 			}
+			else if(KeyManager::getKeyManager()->keyPressed(SDL_SCANCODE_D) && scale > 1800)
+			{
+				//renderQuad.y = -SCREEN_HEIGHT/2;
+				scale -=0.1; 
+			}
+			else if(KeyManager::getKeyManager()->keyPressed(SDL_SCANCODE_LEFT))
+			{
+				camX -= 0.1;
+			}
+			else if(KeyManager::getKeyManager()->keyPressed(SDL_SCANCODE_RIGHT))
+			{
+				camX += 0.1;
+			}
+			else if(KeyManager::getKeyManager()->keyPressed(SDL_SCANCODE_UP))
+			{
+				camY -= 0.1;
+			}
+			else if(KeyManager::getKeyManager()->keyPressed(SDL_SCANCODE_DOWN))
+			{
+				camY += 0.1;
+			}
+			else if(KeyManager::getKeyManager()->keyPressed(SDL_SCANCODE_DOWN))
+			{
+				camY += 0.1;
+			}
+			
+				//Clear screen
+            SDL_RenderClear( renderer );
+             
+			SDL_RenderCopy( renderer, testTexture, &camera, &renderQuad );
+
+			SDL_RenderCopy( renderer, ship, &camera, &shipRec );
+				
+			SDL_RenderSetScale(renderer, scale/6000, scale/3000);
+
+            //Update screen
+            SDL_RenderPresent( renderer );
 		}
+	}
 
 
 	}
 	close();
 	return 0;
 }
-
 
 bool loadMedia() 
 { 
@@ -206,6 +253,15 @@ bool loadMedia()
 	
 	 //Load PNG texture
     testTexture = loadTexture( "pirateMap.png" );
+    if( testTexture == NULL )
+    {
+        printf( "Failed to load texture image!\n" );
+        success = false;
+    }
+
+
+	 //Load PNG texture
+	ship = loadTexture( "ship.png" );
     if( testTexture == NULL )
     {
         printf( "Failed to load texture image!\n" );
